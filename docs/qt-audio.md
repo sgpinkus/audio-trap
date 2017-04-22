@@ -22,10 +22,10 @@ You set the media to play with `void QMediaPlayer::setMedia(const QMediaContent 
 
 Alternatively if you provide a `QIODevice` and QMediaPlayer will stream content from the (opened and readable), QIODevice and use `QMediaContent` as information describing the data coming out of the QIODevice.
 
-Note `QMediaContent` is stupid: It can represent one or collection of QMediaResource. I don't even see why it needs to exist. Anyway it's just a dumb container.
+Note `QMediaContent` is stupid: It can represent one or collection of QMediaResource. I don't see why it needs to exist. Anyway it's just a dumb container.
 
 **QMediaObject**
-`QAudioDecoder`, `QCamera`, `QMediaPlayer`, `QRadioTuner` all inherit QMediaObject for some reason. It's hard to see what these object really have common. One section (needs some segregation really ) of the QMediaObject interface is:
+`QAudioDecoder`, `QCamera`, `QMediaPlayer`, `QRadioTuner` all inherit QMediaObject for some reason. It's hard to see what these objects really have common. One section (needs some segregation really ) of the QMediaObject interface is:
 
     bind(), unbind(), and isAvailable()
 
@@ -52,7 +52,7 @@ QAudioRecorder requires:
 
 Unclear whether is will use reasonable defaults.
 
-**QAudioEncoderSettings** All settings are passed via setEncodingSettings(QAudioEncoderSettings settings, ...) or setAudioSettings(QAudioEncoderSettings settings). The latter does not allow you to set a "container format" (example AVI):
+**QAudioEncoderSettings** All QAudioRecorder settings are passed via QAudioRecorder::setEncodingSettings(QAudioEncoderSettings settings, ...) or setAudioSettings(QAudioEncoderSettings settings). The latter does not allow you to set a "container format" (example AVI):
 
     void	setBitRate(int rate)
     void	setChannelCount(int channels)
@@ -63,20 +63,20 @@ Unclear whether is will use reasonable defaults.
     void	setQuality(QMultimedia::EncodingQuality quality)
     void	setSampleRate(int rate)
 
-QAudioRecorder extends QMediaRecorder and ~all the functionality is in the base class. QAudioRecorder only provides wasy to set and enumerate the audio devices. QMediaRecorder provides the necessary methods to enumerate supported codecs, rates etc:
+QAudioRecorder extends QMediaRecorder and ~all the functionality is in the base class. QAudioRecorder only provides ways to set and enumerate the audio devices. QMediaRecorder provides the necessary methods to enumerate supported codecs, rates etc:
 
     QStringList 	supportedAudioCodecs() const
     QList<int> 	  supportedAudioSampleRates(const QAudioEncoderSettings &settings = QAudioEncoderSettings(), bool *continuous = Q_NULLPTR) const
     QStringList 	supportedContainers() const
 
-The model of QAudio|MediaRecorder is:
+The workflow model of QAudio|MediaRecorder is:
 
     record,stop,pause
 
-Can't actually access the bytes so not useful for me..
+Can't actually access the bytes so not useful for me ... Grrr.
 
 **QAudioProbe**
-Can be used to listen in on any QMediaRecorder, or QMediaObject and receive buffers (roughly) as they are pushed into the given object. But it only works when data is being recorded or generated.
+Can be used to listen in on any QMediaRecorder, or QMediaObject and receive buffers (roughly) as they are pushed into the given object. But it *only works when data is being recorded or generated*.
 
     audioProbe = new QAudioProbe(this);
     audioProbe->setSource(audioRecorder
@@ -133,7 +133,6 @@ There is actually two ways to start - corresponding to "pull"/"push" modes. Pull
     MyIODevice x = new MyIODevice(...);
     audioInput->start(x);
 
-
 # Links
 
   + https://doc.qt.io/qt-5/qtmultimedia-index.html
@@ -141,7 +140,6 @@ There is actually two ways to start - corresponding to "pull"/"push" modes. Pull
   + https://doc.qt.io/qt-5/qaudioinput.html#details
   + https://doc.qt.io/qt-5/qtdatavisualization-audiolevels-example.html
   + https://doc.qt.io/qt-5/qtmultimedia-multimedia-audiorecorder-audiorecorder-cpp.html
-
 
 # Critisisms
 

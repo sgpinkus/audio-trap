@@ -1,5 +1,5 @@
 # Overview
-Audio Trap monitors some audio input device and records for a set period of time when the sound level from the source exceeds a threshold, then stop recording a few second after the sound level from the device drops below that threshold. It can run in command line or GUI mode. The GUI alows you to configure setting and test sound level thresholds to get them right.
+Audio Trap monitors some audio input device and records for a set period of time when the sound level from the source exceeds a threshold, then stops recording a few second after the sound level from the device drops below another lower threshold. It can run in command line or GUI mode. The GUI allows you to configure setting and test sound level thresholds to get them right.
 
 # Requirements
 
@@ -27,4 +27,4 @@ Program is launched from command line. There is only one optional command line o
     cp audio-trap /usr/local/bin/
 
 # TODO
-SEe [TODO.md](docs/TODO.md).
+See [TODO.md](docs/TODO.md).
