@@ -171,7 +171,7 @@
        <item>
         <widget class="QProgressBar" name="channel0ProgressBar">
          <property name="value">
-          <number>24</number>
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -185,7 +185,7 @@
        <item>
         <widget class="QProgressBar" name="channel1ProgressBar">
          <property name="value">
-          <number>24</number>
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -199,7 +199,7 @@
        <item>
         <widget class="QProgressBar" name="triggerLevelProgressBar">
          <property name="value">
-          <number>24</number>
+          <number>10</number>
          </property>
         </widget>
        </item>

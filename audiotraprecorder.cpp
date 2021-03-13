@@ -7,6 +7,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QDateTime>
+#include <QMimeDatabase>
 #include <unistd.h>
 
 AudioTrapRecorder::AudioTrapRecorder(QObject *parent) : QObject(parent) {
@@ -50,11 +51,11 @@ void AudioTrapRecorder::checkAudioViable() {
 void AudioTrapRecorder::readSettings() {
     QSettings settings;
     setOutputDir(settings.value("outputDir", QDir::homePath()).toString());
-    setDeviceName(settings.value("deviceName", "alsa:hw:CARD=PCH,DEV=0").toString());
+    setDeviceName(settings.value("deviceName", ":default").toString());
     setContainerFormat(settings.value("containerFormat", "audio/wav").toString());;
     levelMeter.setLowThreshold(settings.value("lowThreshold", 0.2).toReal());
     levelMeter.setHighThreshold(settings.value("highThreshold", 0.3).toReal());
-    levelMeter.setDampening(settings.value("dampening", 0.9999).toReal());
+    levelMeter.setDampening(settings.value("dampening", 0.90).toReal());
     setTailTime(settings.value("tailTime", 5000).toInt());
 }
 
@@ -143,7 +144,9 @@ void AudioTrapRecorder::update(int read) {
 }
 
 QString AudioTrapRecorder::nextFile() {
-    return outputDir + "/audio-" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh-mm-ss-t") + "." + containerFormat;
+    QMimeDatabase db;
+    QString ext = db.mimeTypeForName(containerFormat).suffixes()[0];
+    return outputDir + "/audio-" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh-mm-ss-t") + "." + ext;
 }
 
 qint32 AudioTrapRecorder::getTailTime() const {

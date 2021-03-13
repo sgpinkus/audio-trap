@@ -1,14 +1,15 @@
-# Overview
-Audio Trap monitors some audio input device and records for a set period of time when the sound level from the source exceeds a threshold, then stops recording a few second after the sound level from the device drops below another lower threshold. It can run in command line or GUI mode. The GUI allows you to configure setting and test sound level thresholds to get them right.
+# Audio Trap
+Simply monitors some audio input device and records for a set period of time when the sound level from the source exceeds a threshold, then stops recording a few second after the sound level drops below another, lower threshold. It can run in command line or GUI mode. The GUI allows you to configure settings and test sound level thresholds to get them right.
 
 # Requirements
-Only test on Linux.
 
   + Qt 5.2+, with qtmultimedia5 library.
   + Working [audio sub-system](https://wiki.qt.io/Qt_5.4_Multimedia_Backends) and an audio input device.
 
+Only tested on Linux.
+
 # Configuration
-There is a single configuration file that backs the settings seen in GUI. Location of the file is system dependent (Debian Linux it is `$HOME/.config/audio-trap/audio-trap.conf`):
+There is a single configuration file that backs the settings seen in GUI. Location of the file is system dependent (on Debian Linux it is `$HOME/.config/audio-trap/audio-trap.conf`):
 
     $ cat ~/.config/audio-trap/audio-trap.conf
     [General]
@@ -23,7 +24,7 @@ There is a single configuration file that backs the settings seen in GUI. Locati
 
     audio-trap [--ui]
 
-Program is launched from command line via executable. There is only one optional command line option `--ui` to start the GUI which allows you to easily change the configuration and see status.
+There is only one optional command line option `--ui` to start the GUI which allows you to easily change/tune the configuration and see output status. Once tuned can run the recorder in the background or what ever. Each recording will be dumped to `<outputDir>/audio-<datetime>.<ext>` indefinitely.
 
 # Build and Installation
 
