@@ -14,7 +14,7 @@ class AudioTrapMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit AudioTrapMainWindow(AudioTrapRecorder & recorder, QWidget *parent = 0);
+    explicit AudioTrapMainWindow(AudioTrapRecorder & recorder, QWidget *parent = nullptr);
     ~AudioTrapMainWindow();
 
 public slots:

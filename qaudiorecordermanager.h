@@ -19,15 +19,15 @@ class QAudioRecorderManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit QAudioRecorderManager(QObject *parent = 0);
+    explicit QAudioRecorderManager(QObject *parent = nullptr);
     ~QAudioRecorderManager();
-    QString	audioInput() const { return m_recorder != NULL ? m_recorder->audioInput() : QString(); }
-    QString audioInputDescription(const QString & name) const { return m_recorder != NULL ? m_recorder->audioInputDescription(name) : QString(); }
-    QStringList	audioInputs() const { return m_recorder != NULL ? m_recorder->audioInputs() : QStringList(); }
-    QString	defaultAudioInput() const { return m_recorder != NULL ? m_recorder->defaultAudioInput() : QString(); }
+    QString	audioInput() const { return m_recorder != nullptr ? m_recorder->audioInput() : QString(); }
+    QString audioInputDescription(const QString & name) const { return m_recorder != nullptr ? m_recorder->audioInputDescription(name) : QString(); }
+    QStringList	audioInputs() const { return m_recorder != nullptr ? m_recorder->audioInputs() : QStringList(); }
+    QString	defaultAudioInput() const { return m_recorder != nullptr ? m_recorder->defaultAudioInput() : QString(); }
     void setAudioInput(const QString& name) { m_name = name; }
-    QStringList	supportedAudioCodecs() const { return m_recorder != NULL ? m_recorder->supportedAudioCodecs() : QStringList(); }
-    QStringList	supportedContainers() const { return m_recorder != NULL ? m_recorder->supportedContainers() : QStringList(); }
+    QStringList	supportedAudioCodecs() const { return m_recorder != nullptr ? m_recorder->supportedAudioCodecs() : QStringList(); }
+    QStringList	supportedContainers() const { return m_recorder != nullptr ? m_recorder->supportedContainers() : QStringList(); }
     QUrl outputLocation() const { return m_location; }
     bool setOutputLocation(const QUrl & location) { m_location = location; return true; }
     void setContainerFormat(const QString & container) { m_container = container; }
@@ -39,7 +39,7 @@ public:
     void initAudioRecorder();
 
 private:
-    QAudioRecorder * m_recorder = NULL;
+    QAudioRecorder * m_recorder = nullptr;
     QAudioProbe m_probe;
     QString m_name;
     QUrl m_location;

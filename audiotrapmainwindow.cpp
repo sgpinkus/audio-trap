@@ -36,8 +36,8 @@ void AudioTrapMainWindow::update()
     // outputDir
     ui->outputDirLabel->setText(m_recorder.getOutputDir());
     // thold settings
-    ui->lowTriggerSlider->setValue(m_levelMeter.getLowThreshold()*1000);
-    ui->highTriggerSlider->setValue(m_levelMeter.getHighThreshold()*1000);
+    ui->lowTriggerSlider->setValue(qint32(m_levelMeter.getLowThreshold())*1000);
+    ui->highTriggerSlider->setValue(qint32(m_levelMeter.getHighThreshold())*1000);
     // dampening
     ui->dampeningSpinBox->setValue(m_levelMeter.getDampening());
     // active/inactive
@@ -63,18 +63,18 @@ void AudioTrapMainWindow::levelUpdate()
     qreal exp = m_levelMeter.channelExpAmplitude();
     QList<qreal> channels = m_levelMeter.avgAmplitude();
     if(channels.length() > 0) {
-        ui->channel0ProgressBar->setValue(quint32(channels[0]*100));
+        ui->channel0ProgressBar->setValue(qint32(channels[0]*100));
     }
     else {
         ui->channel0ProgressBar->setValue(0);
     }
     if(channels.length() > 1) {
-        ui->channel1ProgressBar->setValue(quint32(channels[1]*100));
+        ui->channel1ProgressBar->setValue(qint32(channels[1]*100));
     }
     else {
         ui->channel1ProgressBar->setValue(0);
     }
-    ui->triggerLevelProgressBar->setValue(quint32(exp*100));
+    ui->triggerLevelProgressBar->setValue(qint32(exp*100));
 }
 
 AudioTrapMainWindow::~AudioTrapMainWindow()
@@ -96,27 +96,26 @@ void AudioTrapMainWindow::on_dampeningSpinBox_valueChanged(double arg1)
 void AudioTrapMainWindow::on_lowTriggerSlider_valueChanged(int value)
 {
     (void)(value);
-    quint32 v = ui->lowTriggerSlider->value();
+    qint32 v = ui->lowTriggerSlider->value();
     qreal rv = m_levelMeter.setLowThreshold(v/1000.0);
-    ui->lowTriggerSlider->setValue(quint32(rv*1000));
-    ui->highTriggerSlider->setValue(m_levelMeter.getHighThreshold()*1000);
+    ui->lowTriggerSlider->setValue(qint32(rv*1000));
+    ui->highTriggerSlider->setValue(qint32(m_levelMeter.getHighThreshold())*1000);
 }
 
 void AudioTrapMainWindow::on_highTriggerSlider_valueChanged(int value)
 {
     (void)(value);
-    quint32 v = ui->highTriggerSlider->value();
+    qint32 v = ui->highTriggerSlider->value();
     qreal rv = m_levelMeter.setHighThreshold(v/1000.0);
-    ui->highTriggerSlider->setValue(quint32(rv*1000));
-    ui->lowTriggerSlider->setValue(m_levelMeter.getLowThreshold()*1000);
+    ui->highTriggerSlider->setValue(qint32(rv*1000));
+    ui->lowTriggerSlider->setValue(qint32(m_levelMeter.getLowThreshold())*1000);
 }
 
 /**
  * Recorder may adjust passed in tholds so need to get return value and reset them.
  */
 void AudioTrapMainWindow::setThresholds(quint32 l, quint32 h) {
-
-
+    qDebug() << "TODO" << l << h;
 }
 
 void AudioTrapMainWindow::on_activateButton_clicked()

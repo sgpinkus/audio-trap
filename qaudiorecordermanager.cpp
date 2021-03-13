@@ -23,7 +23,7 @@ QAudioRecorderManager::~QAudioRecorderManager()
 void QAudioRecorderManager::initAudioRecorder()
 {
     // qDebug() << "Init new QAudioRecorder" << m_name << m_container << m_location;
-    if(m_recorder != NULL) {
+    if(m_recorder != nullptr) {
         delete m_recorder;
     }
     m_recorder = new QAudioRecorder(this);
@@ -44,21 +44,21 @@ void QAudioRecorderManager::initAudioRecorder()
 
 void QAudioRecorderManager::pause()
 {
-    if(m_recorder != NULL && m_recorder->state() != QAudioRecorder::PausedState) {
+    if(m_recorder != nullptr && m_recorder->state() != QAudioRecorder::PausedState) {
         m_recorder->pause();
     }
 }
 
 void QAudioRecorderManager::stop()
 {
-    if(m_recorder != NULL && m_recorder->state() != QAudioRecorder::StoppedState) {
+    if(m_recorder != nullptr && m_recorder->state() != QAudioRecorder::StoppedState) {
         m_recorder->stop();
     }
 }
 
 void QAudioRecorderManager::record()
 {
-    if(m_recorder != NULL && m_recorder->state() != QAudioRecorder::RecordingState) {
+    if(m_recorder != nullptr && m_recorder->state() != QAudioRecorder::RecordingState) {
         m_recorder->record();
     }
 }

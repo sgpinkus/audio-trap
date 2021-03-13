@@ -63,6 +63,7 @@ bool AudioLevelMeter::setFormat(const QAudioFormat &format)
                     break;
                 case QAudioFormat::Float:
                     m_maxAmplitude = 0x80000000; // Kind of
+                    break;
                 default:
                     break;
                 }
@@ -83,7 +84,7 @@ bool AudioLevelMeter::setFormat(const QAudioFormat &format)
  */
 void AudioLevelMeter::init() {
     QList<qreal> l;
-    for(quint32 i = 0; i < m_channelCount; i++) {
+    for(qint32 i = 0; i < m_channelCount; i++) {
         l.insert(i, 0.0);
     }
     m_avgAmplitude = m_expAmplitude = m_peakAmplitude = l;
@@ -98,19 +99,19 @@ int AudioLevelMeter::read(const QAudioBuffer &buffer)
     if(!isValid()) {
         return 0;
     }
-    char * data = (char*)buffer.data();
-    quint32 len = buffer.byteCount();
-    const quint32 channelBytes = m_audioFormat.sampleSize() / 8;
-    const quint32 sampleBytes = m_channelCount * channelBytes;
-    const quint32 numSamples = len / sampleBytes;
+    const char * data = static_cast<const char*>(buffer.data());
+    qint32 len = buffer.byteCount();
+    const qint32 channelBytes = m_audioFormat.sampleSize() / 8;
+    const qint32 sampleBytes = m_channelCount * channelBytes;
+    const qint32 numSamples = len / sampleBytes;
     Q_ASSERT(len % sampleBytes == 0);
 
-    for (quint32 j = 0; j < m_channelCount; ++j) {
+    for (qint32 j = 0; j < m_channelCount; ++j) {
         const unsigned char *ptr = reinterpret_cast<const unsigned char *>(data);
         quint32 maxAmpValue = 0;  // Max amplitude value in seen in working channel.
         quint32 sumAmpValue = 0;  // Sum amplitude values in working channel.
         ptr += j*channelBytes;
-        for(quint32 i = 0; i < numSamples; ++i) {
+        for(qint32 i = 0; i < numSamples; ++i) {
             qint64 value = 0;
             if(m_audioFormat.sampleSize() == 8 && m_audioFormat.sampleType() == QAudioFormat::UnSignedInt) {
                 value = *reinterpret_cast<const quint8*>(ptr);
@@ -150,7 +151,7 @@ int AudioLevelMeter::read(const QAudioBuffer &buffer)
             maxAmpValue = qMax(quint32(qAbs(value)), maxAmpValue);
             ptr += sampleBytes;
         }
-        m_avgAmplitude[j] = qreal(sumAmpValue / (numSamples * m_channelCount)) / m_maxAmplitude;
+        m_avgAmplitude[j] = (qreal(sumAmpValue) / (numSamples * m_channelCount)) / m_maxAmplitude;
         m_expAmplitude[j] = qreal(m_expAmplitude[j]*m_alphaExp + m_avgAmplitude[j]*(1.0-m_alphaExp));
         m_peakAmplitude[j] = qreal(maxAmpValue) / m_maxAmplitude;
     }
