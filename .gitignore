@@ -1,4 +1,5 @@
 audio-trap.pro.user*
-.obj/
 .qmake.stash
 .moc/
+.obj/
+.ui/

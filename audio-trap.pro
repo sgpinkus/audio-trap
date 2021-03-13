@@ -6,7 +6,7 @@
   error("Failed loading common.pri")
 }
 
-QT += core multimedia multimediawidgets gui
+QT += core multimedia gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
