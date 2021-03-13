@@ -19,7 +19,6 @@ AudioTrapMainWindow::AudioTrapMainWindow(AudioTrapRecorder &recorder, QWidget *p
 
 void AudioTrapMainWindow::show() {
     QMainWindow::show();
-    QDialog
 }
 
 void AudioTrapMainWindow::update()
