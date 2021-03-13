@@ -17,6 +17,9 @@ void printMsg(QString msg);
 int sig_clean_up(int signum);
 static QPointer<AudioTrapMainWindow> windowPtr = nullptr;
 
+/**
+ * Setup application meta then run AudioTrapRecorder.
+ */
 int main(int argc, char *argv[])
 {
     handle_signals(sig_clean_up);

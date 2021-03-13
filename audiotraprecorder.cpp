@@ -12,7 +12,8 @@
 AudioTrapRecorder::AudioTrapRecorder(QObject *parent) :
     QObject(parent)
 {
-    qDebug() << AudioUtils::audioEnvInfo() << "\n";
+    qDebug().noquote() << AudioUtils::audioEnvInfo() << "\n";
+    checkAudioViable();
     readSettings();
     recorderManager.setOutputLocation(QUrl::fromLocalFile("/dev/null"));
     connect(&recorderManager, SIGNAL(audioInputChanged(const QString)), this, SLOT(audioInputChanged(const QString)), Qt::UniqueConnection);
@@ -38,6 +39,16 @@ void AudioTrapRecorder::quit() {
     saveSettings();
 }
 
+void AudioTrapRecorder::checkAudioViable() {
+    QAudioRecorder recorder;
+    if(!recorder.defaultAudioInput().size()) {
+        qFatal("Could not find an audio device. Check audio configuration and try again.");
+    }
+    if(!recorder.supportedAudioCodecs().size()) {
+        qFatal("List of supported audio codecs is empty. Check audio configuration and try again.");
+    }
+}
+
 /**
  * Read settings from disk or fall back on defaults. Bit laborious.
  */
@@ -46,7 +57,7 @@ void AudioTrapRecorder::readSettings()
     QSettings settings;
     setOutputDir(settings.value("outputDir", QDir::homePath()).toString());
     setDeviceName(settings.value("deviceName", "alsa:hw:CARD=PCH,DEV=0").toString());
-    setContainerFormat(settings.value("containerFormat", "wav").toString());;
+    setContainerFormat(settings.value("containerFormat", "audio/wav").toString());;
     levelMeter.setLowThreshold(settings.value("lowThreshold", 0.2).toReal());
     levelMeter.setHighThreshold(settings.value("highThreshold", 0.3).toReal());
     levelMeter.setDampening(settings.value("dampening", 0.9999).toReal());
@@ -69,7 +80,7 @@ void AudioTrapRecorder::activate()
 {
     qDebug() << "Audio trap recorder activated";
     m_active = true;
-    nullRecording();
+    nullRecording(); // Prime the recorder.
     emit activated();
 }
 

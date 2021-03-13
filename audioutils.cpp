@@ -88,7 +88,7 @@ QString AudioUtils::audioEnvInfo() {
     }
     stream << "SUPPORTED CODECS:\n";
     foreach (const QString &name, recorder.supportedAudioCodecs()) {
-        stream << name << " ";
+        stream << "\t" << name << "\n";
     }
     stream << "SUPPORTED CONTAINERS:\n";
     foreach (const QString &name, recorder.supportedContainers()) {
@@ -108,6 +108,5 @@ QString AudioUtils::audioEnvInfo() {
         stream << "codec="         << fmt.codec();
         stream << ")\n";
     }
-    stream << "\n";
     return info;
 }

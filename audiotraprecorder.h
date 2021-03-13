@@ -45,6 +45,7 @@ public:
     bool isActive() const { return m_active; }
 
 private:
+    void checkAudioViable();
     void readSettings();
     void saveSettings();
     QString nextFile();
