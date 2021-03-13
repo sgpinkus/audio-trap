@@ -34,6 +34,7 @@ public:
     QAudioRecorderManager& getRecorderManager() { return recorderManager; }
     AudioLevelMeter& getAudioLevelMeter() { return levelMeter; }
     QString getDeviceName() const;
+    QStringList getDeviceNames() const;
     void setDeviceName(const QString &value);
     QString getOutputDir() const;
     void setOutputDir(const QString &value);

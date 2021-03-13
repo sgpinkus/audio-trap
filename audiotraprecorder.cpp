@@ -55,8 +55,8 @@ void AudioTrapRecorder::readSettings() {
     setContainerFormat(settings.value("containerFormat", "audio/wav").toString());;
     levelMeter.setLowThreshold(settings.value("lowThreshold", 0.2).toReal());
     levelMeter.setHighThreshold(settings.value("highThreshold", 0.3).toReal());
-    levelMeter.setDampening(settings.value("dampening", 0.90).toReal());
-    setTailTime(settings.value("tailTime", 5000).toInt());
+    levelMeter.setDampening(settings.value("dampening", 0.95).toReal());
+    setTailTime(settings.value("tailTime", 3000).toInt());
 }
 
 void AudioTrapRecorder::saveSettings() {
@@ -68,6 +68,7 @@ void AudioTrapRecorder::saveSettings() {
     settings.setValue("lowThreshold", levelMeter.getLowThreshold());
     settings.setValue("highThreshold", levelMeter.getHighThreshold());
     settings.setValue("dampening", levelMeter.getDampening());
+    settings.setValue("tailTime", tailTime);
 }
 
 void AudioTrapRecorder::activate() {
@@ -116,7 +117,6 @@ void AudioTrapRecorder::tailOut() {
     }
 }
 
-
 /**
  * React to changing level.
  */
@@ -162,11 +162,17 @@ QString AudioTrapRecorder::getDeviceName() const {
     return deviceName;
 }
 
+QStringList AudioTrapRecorder::getDeviceNames() const {
+    return recorderManager.audioInputs();
+}
+
 void AudioTrapRecorder::setDeviceName(const QString &value) {
-    deviceName = value;
-    recorderManager.setAudioInput(deviceName);
-    QAudioDeviceInfo deviceInfo = AudioUtils::getAudioDeviceInfo(deviceName);
-    levelMeter.setFormat(deviceInfo.preferredFormat());
+    if(recorderManager.audioInput() != value) {
+        deviceName = value;
+        recorderManager.setAudioInput(deviceName);
+        QAudioDeviceInfo deviceInfo = AudioUtils::getAudioDeviceInfo(deviceName);
+        levelMeter.setFormat(deviceInfo.preferredFormat());
+    }
 }
 
 QString AudioTrapRecorder::getContainerFormat() const {

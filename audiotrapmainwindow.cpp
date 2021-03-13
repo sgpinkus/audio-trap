@@ -22,8 +22,8 @@ void AudioTrapMainWindow::show() {
 void AudioTrapMainWindow::update() {
     // input device
     ui->inputDeviceComboBox->clear();
-    ui->inputDeviceComboBox->addItems(m_recorder.audioInputs());
-    QString deviceName = m_recorder.audioInput();
+    ui->inputDeviceComboBox->addItems(m_recorder.getDeviceNames());
+    QString deviceName = m_recorder.getDeviceName();
     int deviceIndex = ui->inputDeviceComboBox->findText(deviceName);
     ui->inputDeviceComboBox->setCurrentIndex(deviceIndex);
     // containers
@@ -130,10 +130,7 @@ void AudioTrapMainWindow::on_activateButton_toggled(bool checked) {
 }
 
 void AudioTrapMainWindow::on_inputDeviceComboBox_activated(const QString &arg1) {
-    if(m_recorder.audioInput() != arg1) {
-        qDebug() << "Setting audio device to " << arg1;
-        m_recorder.setAudioInput(arg1);
-    }
+    m_recorder.setDeviceName(arg1);
 }
 
 void AudioTrapMainWindow::on_outputDirButton_clicked() {
