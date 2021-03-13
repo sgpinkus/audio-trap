@@ -3,9 +3,7 @@
 QAudioRecorderManager::QAudioRecorderManager(QObject *parent) :
     QObject(parent)
 {
-    m_settings.setCodec("audio/PCM");
     m_settings.setQuality(QMultimedia::HighQuality);
-    m_container = "wav";
     m_location = "/dev/null";
     initAudioRecorder();
 }
@@ -16,7 +14,7 @@ QAudioRecorderManager::~QAudioRecorderManager()
 }
 
 /**
- * Initialize the QAudioRecorder and hook it up.
+ * Create a new QAudioRecorder instance, pass in setting from this object, and hook up signals.
  * For some reason need to create new heap dynamic recorder with every recording - otherwise hangy shit happens.
  * Set up QAudioProbe too since if client want this it's a PITA to constantly reattach to new recorder.
  */

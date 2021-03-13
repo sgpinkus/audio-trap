@@ -12,8 +12,8 @@
 #include <QPointer>
 
 /**
- * A wrapper over QAudioRecorder to make it work reliably.
- * Alot but not all methods+signals of QAudioRecorder are proxied.
+ * A wrapper over QAudioRecorder to try and make it work reliably. See QAudioRecorderManager::initAudioRecorder().
+ * A lot but not all methods+signals of QAudioRecorder are proxied.
  */
 class QAudioRecorderManager : public QObject
 {
