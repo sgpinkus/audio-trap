@@ -6,9 +6,7 @@
 #include <qendian.h>
 #include "audiolevelmeter.h"
 
-AudioLevelMeter::AudioLevelMeter(QObject *parent)
-    : QObject(parent)
-{
+AudioLevelMeter::AudioLevelMeter(QObject *parent) : QObject(parent) {
     setFormat(QAudioFormat());
 }
 
@@ -19,8 +17,7 @@ AudioLevelMeter::~AudioLevelMeter() {
  * Check the format is supported and calculate m_maxAmplitude.
  * maxAmplitude is only used for noramlizing samples.
  */
-bool AudioLevelMeter::setFormat(const QAudioFormat &format)
-{
+bool AudioLevelMeter::setFormat(const QAudioFormat &format) {
     m_audioFormat = format;
     m_channelCount = format.channelCount();
     m_validAudioFormat = true;
@@ -94,8 +91,7 @@ void AudioLevelMeter::init() {
  * Process next audio buff. Data is expected to be formatted according to our QAudioFormat.
  * All levels are normalized to maxAmplitud for convenience - between [0,1].
  */
-int AudioLevelMeter::read(const QAudioBuffer &buffer)
-{
+int AudioLevelMeter::read(const QAudioBuffer &buffer) {
     if(!isValid()) {
         return 0;
     }
@@ -160,8 +156,7 @@ int AudioLevelMeter::read(const QAudioBuffer &buffer)
     return len;
 }
 
-qreal AudioLevelMeter::setLowThreshold(qreal l)
-{
+qreal AudioLevelMeter::setLowThreshold(qreal l) {
     m_lowLevelThreshold = qMax(0.0, qMin(1.0, l));
     if(m_lowLevelThreshold > m_highLevelThreshold) {
         m_highLevelThreshold = m_lowLevelThreshold;
@@ -169,8 +164,7 @@ qreal AudioLevelMeter::setLowThreshold(qreal l)
     return m_lowLevelThreshold;
 }
 
-qreal AudioLevelMeter::setHighThreshold(qreal h)
-{
+qreal AudioLevelMeter::setHighThreshold(qreal h) {
     m_highLevelThreshold = qMax(0.0, qMin(1.0, h));
     if(m_lowLevelThreshold > m_highLevelThreshold) {
         m_lowLevelThreshold = m_highLevelThreshold;
@@ -178,28 +172,23 @@ qreal AudioLevelMeter::setHighThreshold(qreal h)
     return m_highLevelThreshold;
 }
 
-quint32 AudioLevelMeter::maxAmplitude() const
-{
+quint32 AudioLevelMeter::maxAmplitude() const {
     return m_maxAmplitude;
 }
 
-QList<qreal> AudioLevelMeter::avgAmplitude() const
-{
+QList<qreal> AudioLevelMeter::avgAmplitude() const {
     return m_avgAmplitude;
 }
 
-QList<qreal> AudioLevelMeter::expAmplitude() const
-{
+QList<qreal> AudioLevelMeter::expAmplitude() const {
     return m_expAmplitude;
 }
 
-QList<qreal> AudioLevelMeter::peakAmplitude() const
-{
+QList<qreal> AudioLevelMeter::peakAmplitude() const {
     return m_peakAmplitude;
 }
 
-qreal AudioLevelMeter::channelAvgAmplitude() const
-{
+qreal AudioLevelMeter::channelAvgAmplitude() const {
     qreal v = 0;
     foreach(qreal s, m_avgAmplitude) {
         v += s;
@@ -207,8 +196,7 @@ qreal AudioLevelMeter::channelAvgAmplitude() const
     return v/m_channelCount;
 }
 
-qreal AudioLevelMeter::channelExpAmplitude() const
-{
+qreal AudioLevelMeter::channelExpAmplitude() const {
     qreal v = 0;
     foreach(qreal s, m_expAmplitude) {
         v += s;
@@ -216,8 +204,7 @@ qreal AudioLevelMeter::channelExpAmplitude() const
     return v/m_channelCount;
 }
 
-qreal AudioLevelMeter::channelPeakAmplitude() const
-{
+qreal AudioLevelMeter::channelPeakAmplitude() const {
     qreal v = 0;
     foreach(qreal s, m_peakAmplitude) {
         v += s;
@@ -225,8 +212,7 @@ qreal AudioLevelMeter::channelPeakAmplitude() const
     return v/m_channelCount;
 }
 
-void AudioLevelMeter::updateThresholLevel()
-{
+void AudioLevelMeter::updateThresholLevel() {
     if(m_thresholdState == HIGH) {
         if(channelExpAmplitude() < m_lowLevelThreshold) {
             m_thresholdState = LOW;
@@ -241,8 +227,7 @@ void AudioLevelMeter::updateThresholLevel()
     }
 }
 
-QDebug operator<<(QDebug dbg, AudioLevelMeter &s)
-{
+QDebug operator<<(QDebug dbg, AudioLevelMeter &s) {
     QDebugStateSaver saver(dbg);
     dbg.nospace()  << "STATE:"          << ((s.thresholdState() == AudioLevelMeter::LOW) ? "LOW" : "HIGH") << "; "
                    << "THRESHOLDS:"     << s.thresholds() << "; "
@@ -253,4 +238,3 @@ QDebug operator<<(QDebug dbg, AudioLevelMeter &s)
                    << "EXP_AMP:"        << s.expAmplitude() << "; ";
     return dbg;
 }
-

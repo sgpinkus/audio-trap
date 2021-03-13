@@ -55,8 +55,7 @@ struct sig_to_string {
 /**
  * Default handler.
  */
-static void handler(int signum)
-{
+static void handler(int signum) {
   int i = 0;
   int cont = 0;
 
@@ -87,8 +86,7 @@ static void handler(int signum)
  * @input option pointer to a user defined clean up function.
  * @returns 0 on success -1 on error
  */
-extern bool handle_signals(int (*cleanup_in)(int))
-{
+extern bool handle_signals(int (*cleanup_in)(int)) {
   sigset_t set;
   cleanup = cleanup_in;
   struct sigaction act;
@@ -132,8 +130,7 @@ extern bool handle_signals(int (*cleanup_in)(int))
  * @input pointer to function.
  * @returns old signal handler or SIG_ERR on error.
  */
-sighandler_t set_sig_handler(int signo, sighandler_t func)
-{
+sighandler_t set_sig_handler(int signo, sighandler_t func) {
   struct sigaction  act, oact;
   act.sa_handler = func;
   sigemptyset(&act.sa_mask);

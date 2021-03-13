@@ -2,12 +2,10 @@
 #include "audiotrapmainwindow.h"
 #include "ui_audiotrapmainwindow.h"
 
-AudioTrapMainWindow::AudioTrapMainWindow(AudioTrapRecorder &recorder, QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::AudioTrapMainWindow),
-    m_recorder(recorder),
-    m_levelMeter(m_recorder.getAudioLevelMeter())
-{
+AudioTrapMainWindow::AudioTrapMainWindow(AudioTrapRecorder &recorder, QWidget *parent) : QMainWindow(parent),
+ui(new Ui::AudioTrapMainWindow),
+m_recorder(recorder),
+m_levelMeter(m_recorder.getAudioLevelMeter()) {
     ui->setupUi(this);
     connect(&m_recorder, SIGNAL(activated()), this, SLOT(update()), Qt::UniqueConnection);
     connect(&m_recorder, SIGNAL(deactivated()), this, SLOT(update()), Qt::UniqueConnection);
@@ -21,8 +19,7 @@ void AudioTrapMainWindow::show() {
     QMainWindow::show();
 }
 
-void AudioTrapMainWindow::update()
-{
+void AudioTrapMainWindow::update() {
     // input device
     ui->inputDeviceComboBox->clear();
     ui->inputDeviceComboBox->addItems(m_recorder.audioInputs());
@@ -58,8 +55,7 @@ void AudioTrapMainWindow::update()
     }
 }
 
-void AudioTrapMainWindow::levelUpdate()
-{
+void AudioTrapMainWindow::levelUpdate() {
     qreal exp = m_levelMeter.channelExpAmplitude();
     QList<qreal> channels = m_levelMeter.avgAmplitude();
     if(channels.length() > 0) {
@@ -77,24 +73,20 @@ void AudioTrapMainWindow::levelUpdate()
     ui->triggerLevelProgressBar->setValue(qint32(exp*100));
 }
 
-AudioTrapMainWindow::~AudioTrapMainWindow()
-{
+AudioTrapMainWindow::~AudioTrapMainWindow() {
     delete ui;
 }
 
-void AudioTrapMainWindow::addMessage(const QString &msg)
-{
+void AudioTrapMainWindow::addMessage(const QString &msg) {
     ui->statusTextEdit->append(msg);
 }
 
-void AudioTrapMainWindow::on_dampeningSpinBox_valueChanged(double arg1)
-{
+void AudioTrapMainWindow::on_dampeningSpinBox_valueChanged(double arg1) {
     (void)(arg1);
     m_levelMeter.setDampening(ui->dampeningSpinBox->value());
 }
 
-void AudioTrapMainWindow::on_lowTriggerSlider_valueChanged(int value)
-{
+void AudioTrapMainWindow::on_lowTriggerSlider_valueChanged(int value) {
     (void)(value);
     qint32 v = ui->lowTriggerSlider->value();
     qreal rv = m_levelMeter.setLowThreshold(v/1000.0);
@@ -102,8 +94,7 @@ void AudioTrapMainWindow::on_lowTriggerSlider_valueChanged(int value)
     ui->highTriggerSlider->setValue(qint32(m_levelMeter.getHighThreshold())*1000);
 }
 
-void AudioTrapMainWindow::on_highTriggerSlider_valueChanged(int value)
-{
+void AudioTrapMainWindow::on_highTriggerSlider_valueChanged(int value) {
     (void)(value);
     qint32 v = ui->highTriggerSlider->value();
     qreal rv = m_levelMeter.setHighThreshold(v/1000.0);
@@ -118,8 +109,7 @@ void AudioTrapMainWindow::setThresholds(quint32 l, quint32 h) {
     qDebug() << "TODO" << l << h;
 }
 
-void AudioTrapMainWindow::on_activateButton_clicked()
-{
+void AudioTrapMainWindow::on_activateButton_clicked() {
     if(m_recorder.isActive()) {
         m_recorder.deactivate();
         ui->activateButton->setText("Activate");
@@ -130,8 +120,7 @@ void AudioTrapMainWindow::on_activateButton_clicked()
     }
 }
 
-void AudioTrapMainWindow::on_activateButton_toggled(bool checked)
-{
+void AudioTrapMainWindow::on_activateButton_toggled(bool checked) {
     if(checked) {
         m_recorder.activate();
     }
@@ -140,16 +129,14 @@ void AudioTrapMainWindow::on_activateButton_toggled(bool checked)
     }
 }
 
-void AudioTrapMainWindow::on_inputDeviceComboBox_activated(const QString &arg1)
-{
+void AudioTrapMainWindow::on_inputDeviceComboBox_activated(const QString &arg1) {
     if(m_recorder.audioInput() != arg1) {
         qDebug() << "Setting audio device to " << arg1;
         m_recorder.setAudioInput(arg1);
     }
 }
 
-void AudioTrapMainWindow::on_outputDirButton_clicked()
-{
+void AudioTrapMainWindow::on_outputDirButton_clicked() {
     QString dir = QFileDialog::getExistingDirectory(this,
         tr("Select Directory"),
         QDir::homePath(),
@@ -159,7 +146,6 @@ void AudioTrapMainWindow::on_outputDirButton_clicked()
     ui->outputDirLabel->setText(m_recorder.getOutputDir());
 }
 
-void AudioTrapMainWindow::on_containerFormatComboBox_activated(const QString &arg1)
-{
+void AudioTrapMainWindow::on_containerFormatComboBox_activated(const QString &arg1) {
     m_recorder.setContainerFormat(arg1);
 }

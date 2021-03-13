@@ -20,8 +20,7 @@ static QPointer<AudioTrapMainWindow> windowPtr = nullptr;
 /**
  * Setup application meta then run AudioTrapRecorder.
  */
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     handle_signals(sig_clean_up);
     qInstallMessageHandler(appMsgHandler);
     QApplication::setOrganizationName("audio-trap");
@@ -56,8 +55,7 @@ int main(int argc, char *argv[])
  * Returning 1 from this function will make handle_signals() return to program flow to allow Qt quit.
  * @see handle_signals.c
  */
-int sig_clean_up(int signum)
-{
+int sig_clean_up(int signum) {
   int cont = 0;
   static int continued = 0;
 
@@ -80,13 +78,12 @@ int sig_clean_up(int signum)
  * Termination is handy, maintain that. If you want a core dump use SIGABRT.
  * @todo qFatal() still terminates app abruptly so qApp->quit() is a null op!
  */
-void appMsgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
+void appMsgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
     (void)(context);
     switch (type) {
         case QtDebugMsg:
             printMsg(QString("%1").arg(msg)); // .arg(context.file).arg(context.line).arg(context.function));
-            break; 
+            break;
         #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
         case QtInfoMsg:
             printMsg(QString("INFO:     %1").arg(msg));

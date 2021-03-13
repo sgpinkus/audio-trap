@@ -9,13 +9,10 @@
 #include <QDateTime>
 #include <unistd.h>
 
-AudioTrapRecorder::AudioTrapRecorder(QObject *parent) :
-    QObject(parent)
-{
+AudioTrapRecorder::AudioTrapRecorder(QObject *parent) : QObject(parent) {
     qDebug().noquote() << AudioUtils::audioEnvInfo() << "\n";
     checkAudioViable();
     readSettings();
-    recorderManager.setOutputLocation(QUrl::fromLocalFile("/dev/null"));
     connect(&recorderManager, SIGNAL(audioInputChanged(const QString)), this, SLOT(audioInputChanged(const QString)), Qt::UniqueConnection);
     connect(&recorderManager, SIGNAL(availabilityChanged(bool)), this, SLOT(availabilityChanged(bool)), Qt::UniqueConnection);
     connect(&recorderManager, SIGNAL(actualLocationChanged(QUrl)), this, SLOT(actualLocationChanged(QUrl)), Qt::UniqueConnection);
@@ -25,11 +22,9 @@ AudioTrapRecorder::AudioTrapRecorder(QObject *parent) :
     connect(&recorderManager.getAudioProbe(), SIGNAL(audioBufferProbed(QAudioBuffer)), &levelMeter, SLOT(read(QAudioBuffer)), Qt::UniqueConnection);
     connect(&levelMeter, SIGNAL(levelChange(AudioLevelMeter::ThresholdState)), this, SLOT(levelChange(AudioLevelMeter::ThresholdState)), Qt::UniqueConnection);
     connect(&levelMeter, SIGNAL(update(int)), this, SLOT(update(int)), Qt::UniqueConnection);
-    recorderManager.initAudioRecorder();
 }
 
-AudioTrapRecorder::~AudioTrapRecorder()
-{
+AudioTrapRecorder::~AudioTrapRecorder() {
     quit();
 }
 
@@ -52,8 +47,7 @@ void AudioTrapRecorder::checkAudioViable() {
 /**
  * Read settings from disk or fall back on defaults. Bit laborious.
  */
-void AudioTrapRecorder::readSettings()
-{
+void AudioTrapRecorder::readSettings() {
     QSettings settings;
     setOutputDir(settings.value("outputDir", QDir::homePath()).toString());
     setDeviceName(settings.value("deviceName", "alsa:hw:CARD=PCH,DEV=0").toString());
@@ -64,8 +58,7 @@ void AudioTrapRecorder::readSettings()
     setTailTime(settings.value("tailTime", 5000).toInt());
 }
 
-void AudioTrapRecorder::saveSettings()
-{
+void AudioTrapRecorder::saveSettings() {
     QSettings settings;
     qDebug() << "Savinng settings";
     settings.setValue("outputDir", outputDir);
@@ -76,16 +69,14 @@ void AudioTrapRecorder::saveSettings()
     settings.setValue("dampening", levelMeter.getDampening());
 }
 
-void AudioTrapRecorder::activate()
-{
+void AudioTrapRecorder::activate() {
     qDebug() << "Audio trap recorder activated";
     m_active = true;
     nullRecording(); // Prime the recorder.
     emit activated();
 }
 
-void AudioTrapRecorder::deactivate()
-{
+void AudioTrapRecorder::deactivate() {
     qDebug() << "Audio trap recorder deactivated";
     m_active = false;
     m_recording = false;
@@ -96,8 +87,7 @@ void AudioTrapRecorder::deactivate()
 /**
  * Enter stopped state, setting up recording to /dev/null.
  */
-void AudioTrapRecorder::nullRecording()
-{
+void AudioTrapRecorder::nullRecording() {
     QString last = recorderManager.outputLocation().toLocalFile();
     recorderManager.setOutputLocation(QUrl::fromLocalFile("/dev/null"));
     recorderManager.newRecording();
@@ -111,8 +101,7 @@ void AudioTrapRecorder::nullRecording()
 /**
  * Enter recording state.
  */
-void AudioTrapRecorder::newRecording()
-{
+void AudioTrapRecorder::newRecording() {
     recorderManager.setOutputLocation(QUrl::fromLocalFile(nextFile()));
     recorderManager.newRecording();
     m_recording = true;
@@ -130,8 +119,7 @@ void AudioTrapRecorder::tailOut() {
 /**
  * React to changing level.
  */
-void AudioTrapRecorder::levelChange(AudioLevelMeter::ThresholdState level)
-{
+void AudioTrapRecorder::levelChange(AudioLevelMeter::ThresholdState level) {
     qDebug() << "Level change " << level;
     if(!m_active) {
         return;
@@ -147,87 +135,71 @@ void AudioTrapRecorder::levelChange(AudioLevelMeter::ThresholdState level)
     }
 }
 
-void AudioTrapRecorder::update(int read)
-{
+void AudioTrapRecorder::update(int read) {
     (void)(read);
     static int counter = 0;
     if(++counter % 100 == 0)
         qDebug() << levelMeter;
 }
 
-QString AudioTrapRecorder::nextFile()
-{
+QString AudioTrapRecorder::nextFile() {
     return outputDir + "/audio-" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh-mm-ss-t") + "." + containerFormat;
 }
 
-qint32 AudioTrapRecorder::getTailTime() const
-{
+qint32 AudioTrapRecorder::getTailTime() const {
     return tailTime;
 }
 
-void AudioTrapRecorder::setTailTime(int value)
-{
+void AudioTrapRecorder::setTailTime(int value) {
     tailTime = value;
 }
 
 
-QString AudioTrapRecorder::getDeviceName() const
-{
+QString AudioTrapRecorder::getDeviceName() const {
     return deviceName;
 }
 
-void AudioTrapRecorder::setDeviceName(const QString &value)
-{
+void AudioTrapRecorder::setDeviceName(const QString &value) {
     deviceName = value;
     recorderManager.setAudioInput(deviceName);
     QAudioDeviceInfo deviceInfo = AudioUtils::getAudioDeviceInfo(deviceName);
     levelMeter.setFormat(deviceInfo.preferredFormat());
 }
 
-QString AudioTrapRecorder::getContainerFormat() const
-{
+QString AudioTrapRecorder::getContainerFormat() const {
     return containerFormat;
 }
 
-void AudioTrapRecorder::setContainerFormat(const QString &value)
-{
+void AudioTrapRecorder::setContainerFormat(const QString &value) {
     containerFormat = value;
     recorderManager.setContainerFormat(value);
 }
 
-QString AudioTrapRecorder::getOutputDir() const
-{
+QString AudioTrapRecorder::getOutputDir() const {
     return outputDir;
 }
 
-void AudioTrapRecorder::setOutputDir(const QString &value)
-{
+void AudioTrapRecorder::setOutputDir(const QString &value) {
     outputDir = value;
 }
 
-
-void AudioTrapRecorder::audioInputChanged(const QString name)
-{
+void AudioTrapRecorder::audioInputChanged(const QString name) {
     qDebug() << "audioInputChanged: " << name;
 }
 
-void AudioTrapRecorder::stateChanged(QMediaRecorder::State state)
-{
+void AudioTrapRecorder::stateChanged(QMediaRecorder::State state) {
     qDebug() << "stateChanged: " << AudioUtils::MEDIA_STATE_STRING[state];
 }
 
-void AudioTrapRecorder::statusChanged(QMediaRecorder::Status status)
-{
+void AudioTrapRecorder::statusChanged(QMediaRecorder::Status status) {
     qDebug() << "statusChanged: " << AudioUtils::MEDIA_STATUS_STRING[status];
 }
 
-void AudioTrapRecorder::availabilityChanged(bool available)
-{
+void AudioTrapRecorder::availabilityChanged(bool available) {
     qDebug() << "availablityChanged" << available;
 }
 
-void AudioTrapRecorder::actualLocationChanged(QUrl url)
-{
+void AudioTrapRecorder::actualLocationChanged(QUrl url) {
     qDebug() << "actualLocationChanged" << url.toString();
 }
 

@@ -59,8 +59,7 @@ QAudioDeviceInfo AudioUtils::getAudioDeviceInfo(QString name) {
     return device;
 }
 
-QString AudioUtils::recorderInfo(const QAudioRecorder &recorder)
-{
+QString AudioUtils::recorderInfo(const QAudioRecorder &recorder) {
     QString info;
     QTextStream stream(&info);
     stream << "CURRENT INPUT: " << recorder.audioInput() << "\n";
