@@ -9,7 +9,7 @@ The high level and easiest way to play sound and video. Use with https://doc.qt.
     player->setVolume(50);
     player->play();
 
-Operative workflow methods are:
+Operative state machine methods are:
 
     setMedia(), play(), pause(), stop()
 
@@ -143,37 +143,35 @@ There is actually two ways to start - corresponding to "pull"/"push" modes. Pull
 
 # Critisisms
 
-  + Audio API's are generally complicated. For some reason it seems like audio API designers insist on exposing you to all the fine details of the sound device they are an abstraction over. Case in point QAudioFormat. You need know what the "Sample Type" is (float, [un]signed int), and what the Byte Order of the input your reading is. Taking care of Byte order is *your* job API.. And WTF would I want floats or even unsigned ints? Anyway ...
-  + Who came up with the  "push" "pull" analogy. It is not a good one for input devices. The QAudioInput pushes data to a IODevice. *Period*. You provide it or Qt provides one for you... That is not push vs pull.
-  + Why TF aren't you using a stream paradigm like ~Java. I want QStream<AudioSample> =  new QStream<AudioSample>. Instead I have to demarshall ...
+  + Audio API's are generally complicated. For some reason it seems like audio API designers insist on exposing you to all the fine details of the sound device they are an abstraction over. Case in point QAudioFormat. You need know what the "Sample Type" is (float, [un]signed int), and what the Byte Order of the input your reading is. Taking care of Byte order is *your* job API.. And why would I want floats or even unsigned ints?
+  + Who came up with the  "push" "pull" analogy? It is not a good one for input devices. The QAudioInput pushes data to a IODevice. *Period*. You provide it or Qt provides one for you... That is not push vs pull.
+  + Why isn't Qt using a stream paradigm like ~Java. I want QStream<AudioSample> =  new QStream<AudioSample>. Instead I have to demarshall ...
 
+# Notes
 
-  /*
          switch(recorder.status()) {
-    case QMediaRecorder::UnavailableStatus: {
-        break;
-    }
-    case QMediaRecorder::UnloadedStatus: {
-        break;
-    }
-    case QMediaRecorder::LoadingStatus: {
-        break;
-    }
-    case QMediaRecorder::LoadedStatus: {
-        break;
-    }
-    case QMediaRecorder::StartingStatus: {
-        break;
-    }
-    case QMediaRecorder::RecordingStatus: {
-        break;
-    }
-    case QMediaRecorder::PausedStatus: {
-        break;
-    }
-    case QMediaRecorder::FinalizingStatus: {
-        break;
-    }
-
-}
-*/
+            case QMediaRecorder::UnavailableStatus: {
+                break;
+            }
+            case QMediaRecorder::UnloadedStatus: {
+                break;
+            }
+            case QMediaRecorder::LoadingStatus: {
+                break;
+            }
+            case QMediaRecorder::LoadedStatus: {
+                break;
+            }
+            case QMediaRecorder::StartingStatus: {
+                break;
+            }
+            case QMediaRecorder::RecordingStatus: {
+                break;
+            }
+            case QMediaRecorder::PausedStatus: {
+                break;
+            }
+            case QMediaRecorder::FinalizingStatus: {
+                break;
+            }
+        }

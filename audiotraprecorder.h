@@ -23,7 +23,7 @@ class AudioTrapRecorder : public QObject
 {
     Q_OBJECT
 public:
-    explicit AudioTrapRecorder(QObject *parent = 0);
+    explicit AudioTrapRecorder(QObject *parent = nullptr);
     ~AudioTrapRecorder();
     QString	audioInput() const { return recorderManager.audioInput(); }
     QString	audioInputDescription(const QString & name) const { return recorderManager.audioInputDescription(name); }
@@ -39,8 +39,8 @@ public:
     void setOutputDir(const QString &value);
     QString getContainerFormat() const;
     void setContainerFormat(const QString &value);
-    quint32 getTailTime() const;
-    void setTailTime(const quint32 &value);
+    qint32 getTailTime() const;
+    void setTailTime(int value);
     bool isRecording() const { return m_recording; }
     bool isActive() const { return m_active; }
 
@@ -53,7 +53,7 @@ private:
     QString deviceName;                 /* ALSA/Pulse name of device - not all device mapping to same HW are equal! Some are ~broken.." */
     QString outputDir;                  /* Where to stick audio files */
     QString containerFormat;            /* Example wav */
-    quint32 tailTime;                   /* Time to keep recording after level goes low. */
+    qint32 tailTime;                   /* Time to keep recording after level goes low. */
     QTimer tailTimer;
     AudioLevelMeter::ThresholdState m_level = AudioLevelMeter::LOW;
     bool m_recording = false;

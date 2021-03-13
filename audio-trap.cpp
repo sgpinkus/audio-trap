@@ -15,7 +15,7 @@
 void appMsgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 void printMsg(QString msg);
 int sig_clean_up(int signum);
-QPointer<AudioTrapMainWindow> windowPtr = NULL;
+static QPointer<AudioTrapMainWindow> windowPtr = nullptr;
 
 int main(int argc, char *argv[])
 {

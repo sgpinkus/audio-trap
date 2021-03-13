@@ -50,7 +50,7 @@ void AudioTrapRecorder::readSettings()
     levelMeter.setLowThreshold(settings.value("lowThreshold", 0.2).toReal());
     levelMeter.setHighThreshold(settings.value("highThreshold", 0.3).toReal());
     levelMeter.setDampening(settings.value("dampening", 0.9999).toReal());
-    setTailTime(settings.value("tailTime", 5000).toReal());
+    setTailTime(settings.value("tailTime", 5000).toInt());
 }
 
 void AudioTrapRecorder::saveSettings()
@@ -149,12 +149,12 @@ QString AudioTrapRecorder::nextFile()
     return outputDir + "/audio-" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh-mm-ss-t") + "." + containerFormat;
 }
 
-quint32 AudioTrapRecorder::getTailTime() const
+qint32 AudioTrapRecorder::getTailTime() const
 {
     return tailTime;
 }
 
-void AudioTrapRecorder::setTailTime(const quint32 &value)
+void AudioTrapRecorder::setTailTime(int value)
 {
     tailTime = value;
 }
@@ -197,27 +197,27 @@ void AudioTrapRecorder::setOutputDir(const QString &value)
 
 void AudioTrapRecorder::audioInputChanged(const QString name)
 {
-    //qDebug() << "audioInputChanged: " << name;
+    qDebug() << "audioInputChanged: " << name;
 }
 
 void AudioTrapRecorder::stateChanged(QMediaRecorder::State state)
 {
-    //qDebug() << "stateChanged: " << AudioUtils::MEDIA_STATE_STRING[state];
+    qDebug() << "stateChanged: " << AudioUtils::MEDIA_STATE_STRING[state];
 }
 
 void AudioTrapRecorder::statusChanged(QMediaRecorder::Status status)
 {
-    //qDebug() << "statusChanged: " << AudioUtils::MEDIA_STATUS_STRING[status];
+    qDebug() << "statusChanged: " << AudioUtils::MEDIA_STATUS_STRING[status];
 }
 
 void AudioTrapRecorder::availabilityChanged(bool available)
 {
-    //qDebug() << "availablityChanged" << available;
+    qDebug() << "availablityChanged" << available;
 }
 
 void AudioTrapRecorder::actualLocationChanged(QUrl url)
 {
-    //qDebug() << "actualLocationChanged" << url.toString();
+    qDebug() << "actualLocationChanged" << url.toString();
 }
 
 void AudioTrapRecorder::error(QMediaRecorder::Error error) {

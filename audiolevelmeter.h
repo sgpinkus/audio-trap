@@ -17,7 +17,7 @@ class AudioLevelMeter : public QObject
 public:
     typedef enum { LOW, HIGH } ThresholdState;
 
-    AudioLevelMeter(QObject *parent = NULL);
+    AudioLevelMeter(QObject *parent = nullptr);
     ~AudioLevelMeter();
     void init();
     QAudioFormat format() const { return m_audioFormat; }
@@ -46,7 +46,7 @@ private:
     void updateThresholLevel();
     QAudioFormat m_audioFormat;
     bool m_validAudioFormat = false;
-    quint32 m_channelCount = 0;
+    qint32 m_channelCount = 0;
     qreal m_alphaExp = 0.990;
     quint32 m_maxAmplitude = 0;
     QList<qreal> m_peakAmplitude;
